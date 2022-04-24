@@ -32,45 +32,6 @@ export const AuthProvider = ({ children }) => {
     return auth.signOut();
   }
 
-  function resetPassword(email) {
-    return auth.sendPasswordResetEmail(email);
-  }
-
-  function updateEmail(email) {
-    return currentUser.updateEmail(email);
-  }
-
-  function updatePassword(password) {
-    return currentUser.updatePassword(password);
-  }
-
-  function updateFirstName(firstName) {
-    db.collection("users").doc(currentUser.uid).update({ name: firstName });
-    db.collection("bugs")
-      .where("assignedToId", "==", currentUser.uid)
-      .get()
-      .then((querySnapshots) => {
-        if (querySnapshots.size > 0) {
-          querySnapshots.forEach((bug) => {
-            db.collection("bugs").doc(bug.id).update({ assignedTo: firstName });
-          });
-        }
-      });
-    db.collection("bugs")
-      .where("createById", "==", currentUser.uid)
-      .get()
-      .then((querySnapshots) => {
-        if (querySnapshots.size > 0) {
-          querySnapshots.forEach((bug) => {
-            db.collection("bugs").doc(bug.id).update({ createBy: firstName });
-          });
-        }
-      });
-    return currentUser.updateProfile({
-      displayName: firstName,
-    });
-  }
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
@@ -85,10 +46,6 @@ export const AuthProvider = ({ children }) => {
     signup,
     login,
     logout,
-    resetPassword,
-    updateEmail,
-    updatePassword,
-    updateFirstName,
   };
 
   return (
