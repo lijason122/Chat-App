@@ -1,8 +1,6 @@
 import React, { useState, useRef } from "react";
-import { db } from "../firebase";
+import { db, useCollectionData, serverTimestamp } from "../firebase";
 import { useAuth } from "../contexts/AuthContext";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import { serverTimestamp } from "firebase/firestore";
 import ChatMessage from "./ChatMessage";
 import { useNavigate } from "react-router-dom";
 import "./chat.css";
@@ -13,20 +11,24 @@ const Chat = () => {
   const messagesRef = db.collection("messages");
   const query = messagesRef.orderBy("createdAt").limit(25);
 
-  const [messages] = useCollectionData(query, { idField: "id" });
+  const [messages] = useCollectionData(query);
 
   const [formValue, setFormValue] = useState("");
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    const { uid, photoURL } = currentUser;
 
-    await messagesRef.add({
-      uid,
-      photoURL,
-      text: formValue,
-      createdAt: serverTimestamp(),
-    });
+    const { uid } = currentUser;
+    if (formValue.trim() !== "") {
+      await messagesRef.add({
+        uid,
+        text: formValue,
+        createdAt: serverTimestamp(),
+        name: currentUser.displayName,
+      });
+    } else {
+      alert("Please type a message");
+    }
 
     setFormValue("");
 
@@ -47,7 +49,7 @@ const Chat = () => {
   return (
     <div className="Chat-App">
       <header>
-        <h1>Chat</h1>
+        <h1>Team Chat</h1>
         <button className="link" variant="link" onClick={handleLogout}>
           Sign out
         </button>
@@ -55,12 +57,8 @@ const Chat = () => {
       <section>
         <main>
           {messages &&
-            messages.map((msg) => (
-              <ChatMessage
-                key={msg.id}
-                message={msg}
-                currentUser={currentUser}
-              />
+            messages.map((msg, i) => (
+              <ChatMessage key={i} message={msg} currentUser={currentUser} />
             ))}
           <div ref={scroll}></div>
         </main>
@@ -68,6 +66,7 @@ const Chat = () => {
           <input
             value={formValue}
             onChange={(e) => setFormValue(e.target.value)}
+            placeholder="Type a message..."
           />
           <button type="submit">Send</button>
         </form>

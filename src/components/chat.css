@@ -25,6 +25,7 @@ body {
     justify-content: center;
     min-height: 100vh;
     background-color: rgb(40, 37, 53);
+    width: 400px;
   }
   
   main {
@@ -38,10 +39,6 @@ body {
   
   main::-webkit-scrollbar {
     width: 0.25rem;
-  }
-  
-  main::-webkit-scrollbar-track {
-    background: #1e1e24;
   }
   
   main::-webkit-scrollbar-thumb {
@@ -93,17 +90,6 @@ body {
     cursor: not-allowed;
   }
   
-  
-  .sign-in {
-    color: #282c34;
-    background: white;
-    max-width: 400px;
-    margin: 0 auto;
-  }
-  
-  
-  
-  
   ul, li {
     text-align: left;
     list-style: none;
@@ -130,19 +116,12 @@ body {
     flex-direction: row-reverse;
   }
   
-  .sent p {
+  .sent p.text {
     color: white;
     background: #0b93f6;
     align-self: flex-end;
   }
-  .received p {
+  .received p.text {
     background: #e5e5ea;
     color: black;
-  }
-  
-  img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin: 2px 5px;
   }

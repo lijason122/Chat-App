@@ -1,6 +1,8 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { serverTimestamp } from "firebase/firestore";
 
 const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -12,7 +14,8 @@ const app = firebase.initializeApp({
 });
 
 // init services
-export const db = firebase.firestore();
+const db = firebase.firestore();
 
+export { db, useCollectionData, serverTimestamp };
 export const auth = app.auth();
 export default app;
