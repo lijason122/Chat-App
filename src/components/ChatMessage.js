@@ -7,7 +7,9 @@ const ChatMessage = (props) => {
 
   return (
     <>
-      <div className={`message ${messageClass}`}>
+      <div
+        className={`message ${messageClass} animate__animated animate__fadeInUp`}
+      >
         {uid !== currentUser.uid && <p className="">{name} :</p>}
         <p className="text">{text}</p>
       </div>
